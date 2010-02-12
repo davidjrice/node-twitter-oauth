@@ -6,9 +6,8 @@ var http = require("http"),
     twitter = http.createClient(80, "twitter.com");
 
 var request_headers = {
-  "host": "twitter.com",
   "Authorization": {
-    "realm": "",
+    "realm": "twitter.com",
     "oauth_consumer_key": "cV3cvjwaUW6GKoz55nkc8A",
     "oauth_nonce": crypto.hex_sha1(new Date().getTime()),
     "oauth_signature_method": "HMAC-SHA1",
@@ -23,7 +22,7 @@ var consumer_secret = "0q3N1wUJKjXeM5R84YhaymsEAFpPVbUoBEOwS3ThuAo"
 var signature_key = consumer_secret + "&" + token_secret
 
 var signature_base_string = escape("POST&http://twitter.com/oauth/request_token&" + querystring.stringify(request_headers.Authorization));
-var signature = crypto.b64_hmac_sha1(signature_base_string, signature_key);
+var signature = escape(crypto.b64_hmac_sha1(signature_base_string, signature_key));
 request_headers.Authorization.oauth_signature = signature
 
 
@@ -41,6 +40,7 @@ function prepareHeader(params){
 }
 
 var request = twitter.request("POST", "/oauth/request_token", {
+  "Host": "twitter.com",
   "Authorization": prepareHeader(request_headers.Authorization)
 });
 
