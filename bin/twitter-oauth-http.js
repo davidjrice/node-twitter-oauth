@@ -21,7 +21,8 @@ var request_headers = {
   "Authorization": {
     "realm": "",
     "oauth_consumer_key": "cV3cvjwaUW6GKoz55nkc8A",
-    "oauth_nonce": new Date().getTime(),
+    "oauth_nonce": crypto.hex_sha1(new Date().getTime()),
+    "oauth_signature": "",
     "oauth_signature_method": "HMAC-SHA1",
     "oauth_timestamp": new Date().getTime(),
     "oauth_version": "1.0",
@@ -56,7 +57,11 @@ function prepareHeader(params){
   var stringified = ''
   for(var key in params){
     var value = params[key]
-    stringified += '' + key + '="' + value + '",'
+    if(key != "oauth_version"){
+      stringified += '' + key + '="' + value + '",'
+    } else {
+      stringified += '' + key + '="' + value + '"'
+    }
   }
   return stringified
 }
@@ -69,6 +74,9 @@ debug("CCCCC");
 debug(inspect(req_header));
 
 var request = twitter.request("GET", "/oauth/request_token", req_header);
+
+debug(inspect(request));
+
 
 request.finish(function (response) {
   debug(inspect("STATUS: " + response.statusCode));
