@@ -11,7 +11,6 @@ var request_headers = {
     "realm": "",
     "oauth_consumer_key": "cV3cvjwaUW6GKoz55nkc8A",
     "oauth_nonce": crypto.hex_sha1(new Date().getTime()),
-    "oauth_signature": "",
     "oauth_signature_method": "HMAC-SHA1",
     "oauth_timestamp": new Date().getTime(),
     "oauth_version": "1.0",
@@ -32,8 +31,8 @@ function prepareHeader(params){
   var stringified = 'OAuth '
   for(var key in params){
     var value = params[key]
-    if(key != "oauth_version"){
-      stringified += '' + key + '="' + value + '",'
+    if(key != "oauth_signature"){
+      stringified += '' + key + '="' + value + '",\r\n'
     } else {
       stringified += '' + key + '="' + value + '"'
     }
