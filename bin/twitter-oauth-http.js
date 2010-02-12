@@ -7,7 +7,7 @@ var http = require("http"),
 
 var request_headers = {
   "Authorization": {
-    "realm": "twitter.com",
+    "realm": "",
     "oauth_consumer_key": "cV3cvjwaUW6GKoz55nkc8A",
     "oauth_nonce": crypto.hex_sha1(new Date().getTime()),
     "oauth_signature_method": "HMAC-SHA1",
@@ -31,7 +31,7 @@ function prepareHeader(params){
   for(var key in params){
     var value = params[key]
     if(key != "oauth_signature"){
-      stringified += '' + key + '="' + value + '",\r\n'
+      stringified += '' + key + '="' + value + '",\n'
     } else {
       stringified += '' + key + '="' + value + '"'
     }
