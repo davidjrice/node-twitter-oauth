@@ -44,7 +44,8 @@ var request = twitter.request("POST", "/oauth/request_token", {
   "Authorization": prepareHeader(request_headers.Authorization)
 });
 
-debug(inspect(request));
+debug("REQUEST:");
+puts(request.output[0])
 
 
 request.finish(function (response) {
