@@ -54,7 +54,7 @@ request_headers.Authorization.oauth_signature = signature
 var query = "OAuth " + querystring.stringify(request_headers.Authorization)
 
 function prepareHeader(params){
-  var stringified = ''
+  var stringified = 'OAuth '
   for(var key in params){
     var value = params[key]
     if(key != "oauth_version"){
