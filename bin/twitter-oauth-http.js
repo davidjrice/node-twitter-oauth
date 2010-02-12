@@ -23,7 +23,7 @@ var token_secret = null;
 var consumer_secret = "0q3N1wUJKjXeM5R84YhaymsEAFpPVbUoBEOwS3ThuAo"
 var signature_key = consumer_secret + "&" + token_secret
 
-var signature_base_string = "GET&http://twitter.com/oauth/request_token&" + escape(querystring.stringify(request_headers.Authorization));
+var signature_base_string = escape("POST&http://twitter.com/oauth/request_token&" + querystring.stringify(request_headers.Authorization));
 var signature = crypto.b64_hmac_sha1(signature_base_string, signature_key);
 request_headers.Authorization.oauth_signature = signature
 
@@ -41,7 +41,7 @@ function prepareHeader(params){
   return stringified
 }
 
-var request = twitter.request("GET", "/oauth/request_token", {
+var request = twitter.request("POST", "/oauth/request_token", {
   "Authorization": prepareHeader(request_headers.Authorization)
 });
 
