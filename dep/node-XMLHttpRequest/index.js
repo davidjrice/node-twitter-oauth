@@ -1,1 +1,0 @@
-process.mixin(exports, require('./XMLHttpRequest'));

@@ -1,10 +1,10 @@
 require('../lib/bootstrap');
-Base64 = require('dep/node-base64').Base64;
 
 // CONFIG
 var http = require("http"),
     crypto = require('dep/node-crypto').crypto,
     querystring = require("querystring"),
+    Base64 = require('dep/node-base64').Base64,
     twitter = http.createClient(80, "twitter.com");
     //twitter = http.createClient(61213, "localhost");
 
@@ -20,6 +20,7 @@ var request_headers = {
   }
 }
 
+// The Goodness
 var consumer_secret = "0q3N1wUJKjXeM5R84YhaymsEAFpPVbUoBEOwS3ThuAo",
     domain = "twitter.com"
     path = "/oauth/request_token",
@@ -62,6 +63,7 @@ var OAuth = {
 
 request = OAuth.post(request_headers.Authorization, consumer_secret, method, domain, path, twitter)
 
+// Debugging
 puts("\n\n")
 debug("REQUEST:");
 puts(request.output[0]);
