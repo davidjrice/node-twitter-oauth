@@ -28,6 +28,9 @@ var crypto = exports.crypto = {
   },
   hex_hmac_sha1: function(key, data){
     return binb2hex(core_hmac_sha1(key, data));
+  },
+  str_hmac_sha1: function(key, data){
+    return binb2str(core_hmac_sha1(key, data));
   }
 }
 
