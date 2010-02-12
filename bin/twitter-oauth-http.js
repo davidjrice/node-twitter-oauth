@@ -3,8 +3,8 @@ require('../lib/bootstrap');
 var http = require("http"),
     crypto = require('dep/node-crypto').crypto,
     querystring = require("querystring"),
-    twitter = http.createClient(61213, "localhost");
-//  twitter = http.createClient(80, "twitter.com");
+//    twitter = http.createClient(61213, "localhost");
+    twitter = http.createClient(80, "twitter.com");
     
 var request_headers = {
   "Authorization": {
@@ -16,40 +16,45 @@ var request_headers = {
     "oauth_version": "1.0",
   }
 }
-
-// Generate signature
-var token_secret = null;
 var consumer_secret = "0q3N1wUJKjXeM5R84YhaymsEAFpPVbUoBEOwS3ThuAo"
-var signature_key = consumer_secret + "&"
+var url = "http://twitter.com/oauth/request_token"
+var method = "POST"
 
-var signature_base_string = "GET&"+encodeURIComponent("http://twitter.com/oauth/request_token")+"&"+encodeURIComponent(querystring.stringify(request_headers.Authorization));
-debug("SIGNATURE_KEY: " + signature_key);
-debug("SIGNATURE_BASE: " + signature_base_string);
-var signature = crypto.b64_hmac_sha1(signature_base_string, signature_key);
-request_headers.Authorization.oauth_signature = signature
-
-
-function prepare_header(params){
-  var stringified = 'OAuth '
-  for(var key in params){
-    var value = params[key]
-    if(key != "oauth_signature"){
-      stringified += '' + key + '="' + value + '",\n'
-    } else {
-      stringified += '' + key + '="' + value + '"'
+var OAuth = {
+  generate_signature: function(authorization_header, consumer_secret, method, url){
+    var signature_key = consumer_secret + "&" 
+    var signature_base_string = "POST&"+encodeURIComponent("")+"&"+encodeURIComponent(querystring.stringify(request_headers.Authorization));
+    var signature = crypto.b64_hmac_sha1(signature_base_string, signature_key);
+    debug("SIGNATURE_KEY: " + signature_key);
+    debug("SIGNATURE_BASE: " + signature_base_string);
+    return signature
+  },
+  prepare_header: function(params){
+    var stringified = 'OAuth '
+    for(var key in params){
+      var value = params[key]
+      if(key != "oauth_signature"){
+        stringified += '' + key + '="s' + value + '",\n'
+      } else {
+        stringified += '' + key + '="' + value + '"'
+      }
     }
+    return stringified
   }
-  return stringified
 }
 
-var request = twitter.request("GET", "/oauth/request_token", {
+// Generate signature
+request_headers.Authorization.oauth_signature = OAuth.generate_signature(request_headers.Authorization, consumer_secret, method, url)
+// Make Request
+var request = twitter.request("POST", "/oauth/request_token", {
   "Host": "twitter.com",
-  "Authorization": prepare_header(request_headers.Authorization)
+  "Authorization": OAuth.prepare_header(request_headers.Authorization)
 });
 
+puts("\n\n")
 debug("REQUEST:");
-puts(request.output[0])
-
+puts(request.output[0]);
+puts("\n\n")
 
 request.finish(function (response) {
   debug(inspect("STATUS: " + response.statusCode));
