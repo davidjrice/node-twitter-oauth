@@ -5,8 +5,8 @@ Base64 = require('dep/node-base64').Base64;
 var http = require("http"),
     crypto = require('dep/node-crypto').crypto,
     querystring = require("querystring"),
-    twitter = http.createClient(80, "twitter.com");
-    //twitter = http.createClient(61213, "localhost");
+    //twitter = http.createClient(80, "twitter.com");
+    twitter = http.createClient(61213, "localhost");
 
 // REQUEST
 var request_headers = {
@@ -51,7 +51,7 @@ var OAuth = {
     for(var key in params){
       var value = params[key]
       if(key != "oauth_signature"){
-        stringified += '' + key + '="s' + value + '",\n'
+        stringified += '' + key + '="' + value + '",\n'
       } else {
         stringified += '' + key + '="' + value + '"'
       }
