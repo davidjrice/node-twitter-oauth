@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 require('../lib/bootstrap');
 
+
 var crypto = require('dep/node-crypto');
 var OAuth = require('dep/node-oauth').OAuth;
 var XMLHttpRequest = require('dep/node-XMLHttpRequest').XMLHttpRequest;
