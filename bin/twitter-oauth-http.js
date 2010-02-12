@@ -53,6 +53,7 @@ request.finish(function (response) {
   debug(inspect("HEADERS: " + JSON.stringify(response.headers)));
   response.setBodyEncoding("utf8");
   response.addListener("body", function (chunk) {
-    debug(inspect("BODY: " + chunk));
+    debug(inspect("BODY: "));
+    puts(chunk)
   });
 });
