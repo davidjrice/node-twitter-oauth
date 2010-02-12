@@ -20,11 +20,12 @@ var request_headers = {
 // Generate signature
 var token_secret = null;
 var consumer_secret = "0q3N1wUJKjXeM5R84YhaymsEAFpPVbUoBEOwS3ThuAo"
-var signature_key = consumer_secret + "&" + token_secret
+var signature_key = consumer_secret + "&"
 
 var signature_base_string = "GET&"+encodeURIComponent("http://twitter.com/oauth/request_token")+"&"+encodeURIComponent(querystring.stringify(request_headers.Authorization));
+debug("SIGNATURE_KEY: " + signature_key);
 debug("SIGNATURE_BASE: " + signature_base_string);
-var signature = encodeURIComponent(crypto.b64_hmac_sha1(signature_base_string, signature_key));
+var signature = crypto.b64_hmac_sha1(signature_base_string, signature_key);
 request_headers.Authorization.oauth_signature = signature
 
 
