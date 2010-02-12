@@ -1,11 +1,13 @@
 require('../lib/bootstrap');
 
+// CONFIG
 var http = require("http"),
     crypto = require('dep/node-crypto').crypto,
     querystring = require("querystring"),
-//    twitter = http.createClient(61213, "localhost");
     twitter = http.createClient(80, "twitter.com");
-    
+    //twitter = http.createClient(61213, "localhost");
+
+// REQUEST
 var request_headers = {
   "Authorization": {
     "realm": "",
@@ -16,11 +18,25 @@ var request_headers = {
     "oauth_version": "1.0",
   }
 }
-var consumer_secret = "0q3N1wUJKjXeM5R84YhaymsEAFpPVbUoBEOwS3ThuAo"
-var url = "http://twitter.com/oauth/request_token"
-var method = "POST"
+
+var consumer_secret = "0q3N1wUJKjXeM5R84YhaymsEAFpPVbUoBEOwS3ThuAo",
+    domain = "twitter.com"
+    path = "/oauth/request_token",
+    method = "POST"
 
 var OAuth = {
+  post: function(authorization_header, consumer_secret, method, domain, path, http){
+    // Generate signature
+    var url = "http://"+domain+path
+    
+    authorization_header.oauth_signature = OAuth.generate_signature(authorization_header, consumer_secret, method, url)
+    // Make Request
+    var request = twitter.request(method, path, {
+      "Host": domain,
+      "Authorization": OAuth.prepare_header(authorization_header)
+    });
+    return request;
+  },
   generate_signature: function(authorization_header, consumer_secret, method, url){
     var signature_key = consumer_secret + "&" 
     var signature_base_string = "POST&"+encodeURIComponent("")+"&"+encodeURIComponent(querystring.stringify(request_headers.Authorization));
@@ -43,13 +59,7 @@ var OAuth = {
   }
 }
 
-// Generate signature
-request_headers.Authorization.oauth_signature = OAuth.generate_signature(request_headers.Authorization, consumer_secret, method, url)
-// Make Request
-var request = twitter.request("POST", "/oauth/request_token", {
-  "Host": "twitter.com",
-  "Authorization": OAuth.prepare_header(request_headers.Authorization)
-});
+request = OAuth.post(request_headers.Authorization, consumer_secret, method, domain, path, twitter)
 
 puts("\n\n")
 debug("REQUEST:");
