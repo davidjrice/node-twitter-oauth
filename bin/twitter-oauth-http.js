@@ -15,9 +15,9 @@ var http = require("http"),
 // consumer secret: secret
 
 // REQUEST
-// removed realm=""
 var request_headers = {
   "Authorization": {
+    "realm": "",
     "oauth_consumer_key": "key",
     "oauth_nonce": crypto.hex_sha1(new Date().getTime()),
     "oauth_signature_method": "HMAC-SHA1",
@@ -46,8 +46,9 @@ var OAuth = {
     return request;
   },
   generate_signature: function(authorization_header, consumer_secret, method, url){
+    var attrs_for_base_string = OAuth.authorisation_signature_keys_only(authorization_header);
     var signature_key = consumer_secret + "&"
-    var signature_base_string = "POST&"+encodeURIComponent(url)+"&"+encodeURIComponent(querystring.stringify(request_headers.Authorization));
+    var signature_base_string = "POST&"+encodeURIComponent(url)+"&"+encodeURIComponent(querystring.stringify(attrs_for_base_string));
     var signature = crypto.b64_hmac_sha1(signature_base_string, signature_key);
     debug("URL:" + inspect(url))
     debug("SIGNATURE_KEY: " + signature_key);
@@ -65,6 +66,14 @@ var OAuth = {
       }
     }
     return stringified
+  },
+  authorisation_signature_keys_only: function(hash){
+    var allowed_keys = ["oauth_consumer_key", "oauth_nonce", "oauth_signature_method", "oauth_timestamp", "oauth_version"]
+    var new_hash = {}
+    allowed_keys.forEach(function(key){
+      new_hash[key] = hash[key]
+    });
+    return new_hash;
   }
 }
 
