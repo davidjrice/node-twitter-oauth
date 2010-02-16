@@ -6,14 +6,19 @@ var http = require("http"),
     querystring = require("querystring"),
     Base64 = require('dep/node-base64').Base64,
     hashlib = require("hashlib"),
-    twitter = http.createClient(80, "twitter.com");
+    twitter = http.createClient(80, "term.ie");
     //twitter = http.createClient(61213, "localhost");
 
+
+// http://term.ie/oauth/example/request_token.php
+// consumer key: key
+// consumer secret: secret
+
 // REQUEST
+// removed realm=""
 var request_headers = {
   "Authorization": {
-    "realm": "",
-    "oauth_consumer_key": "cV3cvjwaUW6GKoz55nkc8A",
+    "oauth_consumer_key": "key",
     "oauth_nonce": crypto.hex_sha1(new Date().getTime()),
     "oauth_signature_method": "HMAC-SHA1",
     "oauth_timestamp": new Date().getTime(),
@@ -22,9 +27,9 @@ var request_headers = {
 }
 
 // The Goodness
-var consumer_secret = "0q3N1wUJKjXeM5R84YhaymsEAFpPVbUoBEOwS3ThuAo",
-    domain = "twitter.com"
-    path = "/oauth/request_token",
+var consumer_secret = "secret",
+    domain = "term.ie"
+    path = "/oauth/example/request_token.php",
     method = "POST"
 
 var OAuth = {
