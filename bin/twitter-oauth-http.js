@@ -5,6 +5,7 @@ var http = require("http"),
     crypto = require('dep/node-crypto').crypto,
     querystring = require("querystring"),
     Base64 = require('dep/node-base64').Base64,
+    hashlib = require("hashlib"),
     twitter = http.createClient(80, "twitter.com");
     //twitter = http.createClient(61213, "localhost");
 
@@ -42,7 +43,7 @@ var OAuth = {
   generate_signature: function(authorization_header, consumer_secret, method, url){
     var signature_key = consumer_secret + "&" 
     var signature_base_string = "POST&"+encodeURIComponent("")+"&"+encodeURIComponent(querystring.stringify(request_headers.Authorization));
-    var signature = Base64.encode(crypto.hex_hmac_sha1(signature_base_string, signature_key));
+    var signature = Base64.encode(hashlib.hmac_sha1(signature_base_string, signature_key));
     debug("SIGNATURE_KEY: " + signature_key);
     debug("SIGNATURE_BASE: " + signature_base_string);
     return signature

@@ -4,3 +4,4 @@ This is a work-in-progress. Currently not working, however to run the test execu
 
     node bin/twitter-oauth-http.js
     
+Current version requires hashlib(http://github.com/brainfucker/hashlib)
