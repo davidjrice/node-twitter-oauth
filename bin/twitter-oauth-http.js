@@ -28,7 +28,7 @@ var consumer_secret = "0q3N1wUJKjXeM5R84YhaymsEAFpPVbUoBEOwS3ThuAo",
     method = "POST"
 
 var OAuth = {
-  post: function(authorization_header, consumer_secret, method, domain, path, http){
+  post: function(authorization_header, consumer_secret, method, domain, path, http){  
     // Generate signature
     var url = "http://"+domain+path
     
@@ -41,9 +41,10 @@ var OAuth = {
     return request;
   },
   generate_signature: function(authorization_header, consumer_secret, method, url){
-    var signature_key = consumer_secret + "&" 
+    var signature_key = consumer_secret + "&"
     var signature_base_string = "POST&"+encodeURIComponent(url)+"&"+encodeURIComponent(querystring.stringify(request_headers.Authorization));
     var signature = crypto.b64_hmac_sha1(signature_base_string, signature_key);
+    debug("URL:" + inspect(url))
     debug("SIGNATURE_KEY: " + signature_key);
     debug("SIGNATURE_BASE: " + signature_base_string);
     return signature
